@@ -18,12 +18,12 @@ public class XposedOrNotClient {
         this.restClient = RestClient.builder().baseUrl(baseUrl).build();
     }
 
-    public List<XposedOrNotBreach> breachAnalytics(String email) {
+    public List<XposedOrNotBreach> checkEmail(String email) {
         JsonNode response = restClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/v1/breach-analytics")
-                        .queryParam("email", email)
-                        .build())
+                        .path("/v1/check-email/{email}")
+                        .queryParam("details", true)
+                        .build(email))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (request, clientResponse) -> {
                     if (clientResponse.getStatusCode().value() != 404) {
@@ -37,23 +37,51 @@ public class XposedOrNotClient {
             return List.of();
         }
 
-        JsonNode exposedBreaches = field(response, "ExposedBreaches", "exposedBreaches");
-        if (exposedBreaches == null || !exposedBreaches.isArray()) {
-            return List.of();
+        JsonNode detailedBreaches = field(response, "breach_details", "breachDetails");
+        if (detailedBreaches != null && detailedBreaches.isArray()) {
+            return parseDetailedBreaches(detailedBreaches);
         }
 
-        List<XposedOrNotBreach> breaches = new ArrayList<>();
-        for (JsonNode breach : exposedBreaches) {
-            String name = text(breach, "breach", "Breach", "name", "Name");
+        // Graceful fallback if the free endpoint returns only breach names.
+        JsonNode names = field(response, "breaches", "Breaches");
+        if (names != null && names.isArray()) {
+            List<XposedOrNotBreach> result = new ArrayList<>();
+            for (JsonNode group : names) {
+                if (!group.isArray()) {
+                    continue;
+                }
+                for (JsonNode item : group) {
+                    if (item.isTextual() && !item.asText().isBlank()) {
+                        result.add(new XposedOrNotBreach(item.asText(), List.of()));
+                    }
+                }
+            }
+            return List.copyOf(result);
+        }
+
+        return List.of();
+    }
+
+    private static List<XposedOrNotBreach> parseDetailedBreaches(JsonNode breaches) {
+        List<XposedOrNotBreach> result = new ArrayList<>();
+
+        for (JsonNode breach : breaches) {
+            String name = text(breach, "name", "breach", "Name", "Breach");
             if (name == null || name.isBlank()) {
                 continue;
             }
 
-            List<String> dataClasses = values(breach, "xposed_data", "xposedData", "exposedData", "ExposedData");
-            breaches.add(new XposedOrNotBreach(name, dataClasses));
+            List<String> dataClasses = values(
+                    breach,
+                    "exposed_data",
+                    "xposed_data",
+                    "exposedData",
+                    "xposedData");
+
+            result.add(new XposedOrNotBreach(name, dataClasses));
         }
 
-        return List.copyOf(breaches);
+        return List.copyOf(result);
     }
 
     private static JsonNode field(JsonNode node, String... names) {
