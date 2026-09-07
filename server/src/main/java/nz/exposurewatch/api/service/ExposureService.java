@@ -20,7 +20,7 @@ public class ExposureService {
 
     public ExposureResponse check(String email) {
         String normalizedEmail = email.trim().toLowerCase();
-        List<XposedOrNotBreach> sourceBreaches = exposureClient.breachAnalytics(normalizedEmail);
+        List<XposedOrNotBreach> sourceBreaches = exposureClient.checkEmail(normalizedEmail);
 
         List<BreachRecord> breaches = sourceBreaches.stream()
                 .map(breach -> new BreachRecord(
