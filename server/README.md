@@ -1,13 +1,23 @@
 # ExposureWatch API
 
-Spring Boot API for checking whether an email address appears in known breaches.
+Spring Boot API for checking whether an email address appears in known breaches and turning the result into a simple exposure score.
 
 ## Stack
 
 - Java 21
 - Spring Boot 4.1.1
 - Maven
-- Have I Been Pwned API v3
+- XposedOrNot free breach intelligence API
+
+## Free-data architecture
+
+ExposureWatch does **not** require a paid breach-search API key.
+
+The server calls XposedOrNot's public `/v1/breach-analytics` endpoint. The free API provides email breach lookups and breach analytics without an API key, with published per-IP rate limits. ExposureWatch keeps the provider call server-side so the frontend never depends directly on the upstream API.
+
+Provider: `https://api.xposedornot.com`
+
+Free-tier limits are important for an MVP: email breach analytics is limited to 2 requests/second, 25 requests/hour, and 100 requests/day per IP. The application should therefore add caching and request throttling before any public launch with meaningful traffic.
 
 ## Endpoint
 
@@ -45,9 +55,9 @@ Example response:
 
 ## Configuration
 
-Copy `server/.env.example` into your deployment environment and set `HIBP_API_KEY`.
+No breach-provider API key is required.
 
-The HIBP API key must remain server-side. HIBP requires an API key and a descriptive `user-agent` for authenticated breach searches, so the browser should only call ExposureWatch. See the official HIBP API documentation: https://haveibeenpwned.com/API/v3
+Copy `server/.env.example` into your deployment environment. The upstream base URL defaults to the public XposedOrNot API and can be overridden with `XPOSEDORNOT_BASE_URL` if required.
 
 ## Run locally
 
@@ -81,4 +91,12 @@ The initial MVP scoring policy is intentionally simple: 20 points per breach, ca
 - 51–75: High
 - 76–100: Critical
 
-This is a replaceable service rather than a permanent product rule.
+This scoring layer is independent of the breach provider and can be replaced later with a richer risk model.
+
+## Production roadmap
+
+1. Add short-lived caching keyed by a one-way email hash.
+2. Add application-level rate limiting so the upstream free quota is protected.
+3. Add provider attribution in the UI where required by the provider's current terms.
+4. Add a second independent source later rather than coupling the product permanently to one breach database.
+5. Treat the current free API as an MVP/low-volume dependency; higher-volume or commercial use should be reviewed against the provider's current terms and limits.

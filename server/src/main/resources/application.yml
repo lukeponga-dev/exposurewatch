@@ -6,10 +6,8 @@ spring:
     name: exposurewatch-api
 
 exposurewatch:
-  hibp:
-    base-url: ${HIBP_BASE_URL:https://haveibeenpwned.com/api/v3}
-    api-key: ${HIBP_API_KEY:}
-    user-agent: ${HIBP_USER_AGENT:ExposureWatch/0.1 (+https://exposurewatch.nz)}
+  xposedornot:
+    base-url: ${XPOSEDORNOT_BASE_URL:https://api.xposedornot.com}
 
 management:
   endpoints:
