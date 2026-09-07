@@ -1,0 +1,22 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: exposurewatch-api
+
+exposurewatch:
+  hibp:
+    base-url: ${HIBP_BASE_URL:https://haveibeenpwned.com/api/v3}
+    api-key: ${HIBP_API_KEY:}
+    user-agent: ${HIBP_USER_AGENT:ExposureWatch/0.1 (+https://exposurewatch.nz)}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
