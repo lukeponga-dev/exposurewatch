@@ -1,28 +1,28 @@
 package nz.exposurewatch.api.service;
 
-import nz.exposurewatch.api.hibp.HibpBreach;
-import nz.exposurewatch.api.hibp.HibpClient;
 import nz.exposurewatch.api.model.BreachRecord;
 import nz.exposurewatch.api.model.ExposureResponse;
+import nz.exposurewatch.api.xposedornot.XposedOrNotBreach;
+import nz.exposurewatch.api.xposedornot.XposedOrNotClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ExposureService {
-    private final HibpClient hibpClient;
+    private final XposedOrNotClient exposureClient;
     private final ExposureScoring scoring;
 
-    public ExposureService(HibpClient hibpClient, ExposureScoring scoring) {
-        this.hibpClient = hibpClient;
+    public ExposureService(XposedOrNotClient exposureClient, ExposureScoring scoring) {
+        this.exposureClient = exposureClient;
         this.scoring = scoring;
     }
 
     public ExposureResponse check(String email) {
         String normalizedEmail = email.trim().toLowerCase();
-        List<HibpBreach> hibpBreaches = hibpClient.breachedAccount(normalizedEmail);
+        List<XposedOrNotBreach> sourceBreaches = exposureClient.breachAnalytics(normalizedEmail);
 
-        List<BreachRecord> breaches = hibpBreaches.stream()
+        List<BreachRecord> breaches = sourceBreaches.stream()
                 .map(breach -> new BreachRecord(
                         breach.name(),
                         breach.dataClasses() == null ? List.of() : breach.dataClasses()))
