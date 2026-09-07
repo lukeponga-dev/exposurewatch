@@ -1,6 +1,5 @@
 package nz.exposurewatch.api.hibp;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -34,15 +33,13 @@ public class HibpClient {
                         .path("/breachedaccount/{email}")
                         .queryParam("truncateResponse", "false")
                         .build(email))
-                .header(HttpHeaders.AUTHORIZATION, "")
                 .header("hibp-api-key", apiKey)
                 .header(HttpHeaders.USER_AGENT, userAgent)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
-                    if (response.getStatusCode().value() == 404) {
-                        return;
+                .onStatus(HttpStatusCode::is4xxClientError, (request, clientResponse) -> {
+                    if (clientResponse.getStatusCode().value() != 404) {
+                        throw new HibpException("HIBP rejected the request: HTTP " + clientResponse.getStatusCode().value());
                     }
-                    throw new HibpException("HIBP rejected the request: HTTP " + response.getStatusCode().value());
                 })
                 .body(HibpBreach[].class);
 
