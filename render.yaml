@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: exposurewatch-api
+    runtime: docker
+    rootDir: server
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: EXPOSUREWATCH_FRONTEND_ORIGIN
+        value: https://exposurewatch.vercel.app
+      - key: XPOSEDORNOT_BASE_URL
+        value: https://api.xposedornot.com
