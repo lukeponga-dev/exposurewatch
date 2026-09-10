@@ -1,6 +1,6 @@
 package nz.exposurewatch.api.config;
 
-import nz.exposurewatch.api.hibp.HibpClient;
+import nz.exposurewatch.api.xposedornot.XposedOrNotClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,12 +21,12 @@ public class ApiExceptionHandler {
     public ProblemDetail configuration(IllegalStateException exception) {
         ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.SERVICE_UNAVAILABLE);
         problem.setTitle("Exposure service is not configured");
-        problem.setDetail("The HIBP integration is not configured on the server.");
+        problem.setDetail("The exposure provider is not configured on the server.");
         return problem;
     }
 
-    @ExceptionHandler(HibpClient.HibpException.class)
-    public ProblemDetail hibp(HibpClient.HibpException exception) {
+    @ExceptionHandler(XposedOrNotClient.XposedOrNotException.class)
+    public ProblemDetail provider(XposedOrNotClient.XposedOrNotException exception) {
         ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_GATEWAY);
         problem.setTitle("Exposure provider unavailable");
         problem.setDetail("The breach data provider could not complete the request.");

@@ -1,8 +1,12 @@
 node_modules/
 .svelte-kit/
 build/
+server/target/
+server/.m2repo/
 .vercel/
 .env
 .env.*
 !.env.example
 .DS_Store
+.vercel
+.env*
