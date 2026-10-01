@@ -1,4 +1,4 @@
-import type { PUBLIC_API_BASE_URL, PUBLIC_EXPOSURE_CHECK_PATH } from '$env/static/private';
+import { PUBLIC_API_BASE_URL, PUBLIC_EXPOSURE_CHECK_PATH } from '$env/static/public';
 import type { ExposureResult } from '$lib/types/exposure';
 
 export async function checkExposure(email: string): Promise<ExposureResult> {

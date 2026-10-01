@@ -13,7 +13,7 @@ Spring Boot API for checking whether an email address appears in known breaches 
 
 ExposureWatch does **not** require a paid breach-search API key.
 
-The server calls XposedOrNot's public `/v1/breach-analytics` endpoint. The free API provides email breach lookups and breach analytics without an API key, with published per-IP rate limits. ExposureWatch keeps the provider call server-side so the frontend never depends directly on the upstream API.
+The server calls XposedOrNot's public `/v1/check-email/{email}?details=true` endpoint. The free API provides email breach lookups and breach analytics without an API key, with published per-IP rate limits. ExposureWatch keeps the provider call server-side so the frontend never depends directly on the upstream API.
 
 Provider: `https://api.xposedornot.com`
 
@@ -57,7 +57,7 @@ Example response:
 
 No breach-provider API key is required.
 
-Copy `server/.env.example` into your deployment environment. The upstream base URL defaults to the public XposedOrNot API and can be overridden with `XPOSEDORNOT_BASE_URL` if required.
+Copy `.env.example` into your deployment environment. The upstream base URL defaults to the public XposedOrNot API and can be overridden with `XPOSEDORNOT_BASE_URL` if required.
 
 ## Run locally
 
@@ -78,7 +78,11 @@ curl -X POST http://localhost:8080/exposure/check \
 
 ## Health
 
-Spring Boot Actuator exposes:
+The lightweight application probe returns `{"status":"UP"}`:
+
+`GET /health`
+
+Spring Boot Actuator also exposes the deployment probe:
 
 `GET /actuator/health`
 
