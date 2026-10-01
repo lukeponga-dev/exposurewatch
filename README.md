@@ -1,42 +1,66 @@
-# ExposureWatch
 
-ExposureWatch is a SvelteKit frontend for checking whether an email address has appeared in known data breaches. It presents an exposure score, risk level, and breach details returned by the ExposureWatch Spring Boot API.
+# ExposureWatch — Email Exposure Checker
 
-## Stack
+ExposureWatch is a lightweight SvelteKit 5 application that checks whether an email address has appeared in known data breaches. It communicates with the ExposureWatch Spring Boot API and displays an exposure score, risk level, and detailed breach information.
 
-- Svelte 5 + SvelteKit
+---
+
+## 📖 Documentation
+
+[Project documentation](docs/overview.md)
+
+[API Reference](API-Reference.MD)
+
+## 🚀 Features
+
+- Check if an email appears in known data breaches
+- Exposure score + risk level
+- Detailed breach list with data classes
+- Fast SvelteKit 5 frontend using runes
+- Clean API layer with typed responses
+- Vercel‑ready deployment
+
+---
+
+## 🧱 Tech Stack
+
+### Frontend
+
+- SvelteKit 5
+- Svelte runes (`$state`, `$props`)
 - TypeScript
 - Vite
-- Spring Boot API at `https://api.exposurewatch.nz`
-- Vercel-compatible SvelteKit adapter
 
-## Local setup
+### Backend
 
-```bash
-npm install
-cp .env.example .env
-npm run dev
-```
+- Spring Boot API
+- JSON exposure report
+- Hosted at: `https://api.exposurewatch.nz`
 
-Set the API endpoint in `.env` if the Spring Boot route differs:
+---
 
-```env
-PUBLIC_API_BASE_URL=https://api.exposurewatch.nz
-PUBLIC_EXPOSURE_CHECK_PATH=/exposure/check
-```
+## 🔄 How It Works
 
-The frontend sends `POST {PUBLIC_API_BASE_URL}{PUBLIC_EXPOSURE_CHECK_PATH}` with:
+1. User enters an email
+2. Frontend sends a POST request to the API
+3. API returns exposure score + breach details
+4. UI renders risk level and breach list
 
-```json
-{ "email": "you@example.com" }
-```
-
-and expects an `ExposureResult` shaped like:
+### Example Request
 
 ```json
 {
+  "email": "you@example.com"
+}
+```
+
+### Example Response
+
+```json
+{
+  "email": "you@example.com",
   "score": 72,
-  "level": "HIGH",
+  "level": "High",
   "breaches": [
     {
       "breachName": "Example breach",
@@ -46,15 +70,46 @@ and expects an `ExposureResult` shaped like:
 }
 ```
 
-If your existing Spring Boot API uses a different route or JSON shape, update `src/lib/api/exposure.ts` and `src/lib/types/exposure.ts` to match it.
+---
 
-## Svelte 5 conventions
-
-This project uses Svelte 5 runes and event attributes: `$state`, `$props`, and `onsubmit`. It does not use legacy `export let`, `on:click`, or slot APIs.
-
-## Build
+## 🧪 Local Development
 
 ```bash
-npm run check
-npm run build
+npm install
+cp .env.example .env
+npm run dev
 ```
+
+### Required Environment Variables
+
+```env
+PUBLIC_API_BASE_URL=https://api.exposurewatch.nz
+PUBLIC_EXPOSURE_CHECK_PATH=/exposure/check
+```
+
+If your API uses different routes or JSON shapes, update:
+
+- `src/lib/api/exposure.ts`
+- `src/lib/types/exposure.ts`
+
+---
+
+## 📁 Project Structure
+
+```text
+src/
+ ├─ lib/
+ │   ├─ api/exposure.ts      # API client
+ │   └─ types/exposure.ts    # Type definitions
+ ├─ routes/
+ │   └─ +page.svelte         # Main UI
+ └─ components/
+     ├─ EmailInput.svelte
+     └─ ExposureResult.svelte
+```
+
+---
+
+## 📜 License
+
+MIT

@@ -14,7 +14,6 @@
         <li>
           <div>
             <strong>{breach.breachName}</strong>
-            {#if breach.date}<time>{breach.date}</time>{/if}
           </div>
           {#if breach.dataClasses?.length}
             <p>Data exposed: {breach.dataClasses.join(', ')}</p>
@@ -31,7 +30,6 @@
   ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .65rem; }
   li { padding: 1rem; border: 1px solid var(--border); border-radius: .85rem; background: var(--surface); }
   li div { display: flex; justify-content: space-between; gap: 1rem; }
-  time { color: var(--muted); font-size: .85rem; }
   p { margin: .35rem 0 0; color: var(--muted); }
   .empty { margin: 0; padding: 1rem; border-radius: .85rem; background: var(--surface); color: var(--muted); }
 </style>

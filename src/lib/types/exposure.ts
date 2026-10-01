@@ -1,16 +1,13 @@
-export type ExposureLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | string;
+export type ExposureLevel = 'Low' | 'Medium' | 'High' | 'Critical';
 
 export interface Breach {
   breachName: string;
-  dataClasses?: string[];
-  date?: string;
-  description?: string;
+  dataClasses: string[];
 }
 
 export interface ExposureResult {
+  email: string;
   score: number;
   level: ExposureLevel;
   breaches: Breach[];
-  email?: string;
-  message?: string;
 }
