@@ -1,4 +1,4 @@
-export type ExposureLevel = 'Low' | 'Medium' | 'High' | 'Critical';
+export type ExposureLevel = "Low" | "Medium" | "High" | "Critical";
 
 export interface Breach {
   breachName: string;

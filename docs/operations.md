@@ -1,7 +1,7 @@
 # Operations
 
-**Status:** Current setup with unverified production details  
-**Last updated:** 2026-10-01
+**Status:** Current deployed setup
+**Last updated:** 2026-10-02
 
 ## Local Development
 
@@ -37,7 +37,19 @@ The API also exposes `/health` for a lightweight application probe.
 
 ## Deployment
 
-`render.yaml` describes a Docker-based Render web service rooted at `server`, with `/actuator/health` as the health check. The API also exposes `/health` for a lightweight application probe. The deployment plan sets the provider base URL and a frontend origin. The actual deployed hostnames and environment values require verification.
+The frontend is deployed to Vercel at <https://exposurewatch.vercel.app>. The API is deployed to Render at <https://exposurewatch-api.onrender.com>.
+
+`render.yaml` describes the Docker-based Render web service rooted at `server`, with `/actuator/health` as the health check. The API also exposes `/health` for a lightweight application probe.
+
+For Vercel, set `PUBLIC_API_BASE_URL` to the Render API origin and redeploy because public environment variables are embedded during the frontend build. For Render, set `EXPOSUREWATCH_FRONTEND_ORIGIN` to the final Vercel origin.
+
+The API Docker image can be tested locally with:
+
+```bash
+cd server
+docker build -t exposurewatch-api .
+docker run --rm -p 8080:8080 exposurewatch-api
+```
 
 ## Monitoring And Recovery
 
@@ -57,6 +69,6 @@ Open:
 
 - Run frontend `npm run check`, `npm run lint`, and `npm run build`.
 - Run backend Maven verification with the required Java version.
-- Verify CORS from the deployed frontend origin.
+- Verify CORS from <https://exposurewatch.vercel.app>.
 - Verify valid, invalid, empty-result, provider-error, and health-check requests.
 - Review provider limits, attribution, and permitted usage against current terms.

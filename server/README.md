@@ -68,6 +68,19 @@ mvn spring-boot:run
 
 The API starts on `http://localhost:8080` by default.
 
+## Deployment
+
+The API is deployed to Render at <https://exposurewatch-api.onrender.com>.
+The repository root `render.yaml` provisions the Docker web service from this directory.
+The Render health check uses `/actuator/health`.
+
+Build and run the container locally with:
+
+```bash
+docker build -t exposurewatch-api .
+docker run --rm -p 8080:8080 exposurewatch-api
+```
+
 Test with:
 
 ```bash

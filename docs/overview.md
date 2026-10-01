@@ -1,8 +1,8 @@
 # ExposureWatch
 
-**Status:** MVP implementation; deployment and production readiness are not fully verified  
+**Status:** MVP deployed; production hardening remains open
 **Audience:** Contributors, product stakeholders, and operators  
-**Last updated:** 2026-10-01
+**Last updated:** 2026-10-02
 
 ## Purpose
 
@@ -13,6 +13,8 @@ ExposureWatch checks whether an email address appears in known data breaches and
 - **Frontend:** SvelteKit 5, TypeScript, Vite, deployed separately from the API.
 - **Backend:** Spring Boot API on Java 21, built with Maven.
 - **Provider:** XposedOrNot public API, called server-side.
+- **Production frontend:** <https://exposurewatch.vercel.app>
+- **Production API:** <https://exposurewatch-api.onrender.com>
 - **Primary workflow:** Submit an email, call `POST /exposure/check`, calculate a score, and render the result.
 - **Health endpoint:** `GET /actuator/health`.
 
@@ -38,5 +40,6 @@ ExposureWatch checks whether an email address appears in known data breaches and
 ### Not confirmed
 
 - Automated tests are not present in the inspected source tree.
-- Production deployment health, domain ownership, quotas, and provider terms have not been verified here.
+- Production frontend/API health and the production CORS preflight have been verified.
+- Domain ownership, quotas, and provider terms still require operational review.
 - Caching and application-level rate limiting are planned but not implemented in the inspected code.

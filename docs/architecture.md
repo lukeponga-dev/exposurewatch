@@ -1,7 +1,7 @@
 # Architecture
 
 **Status:** Current-state architecture with proposed hardening items  
-**Last updated:** 2026-10-01
+**Last updated:** 2026-10-02
 
 ## Context
 
@@ -22,15 +22,12 @@ flowchart TD
     Frontend --> User
 ```
 
-## Proposed hardening items
+## Deployment
 
-1. Add a rate limiter to the API to prevent abuse.
-2. Add a CAPTCHA to the API to prevent abuse.
-3. Add a rate limiter to the API to prevent abuse.
-4. Add a CAPTCHA to the API to prevent abuse.
-5. Add a rate limiter to the API to prevent abuse.
-6. Add a CAPTCHA to the API to prevent abuse.
-7. Add a rate limiter to the API to prevent abuse.
+- The SvelteKit frontend is deployed to Vercel at <https://exposurewatch.vercel.app>.
+- The Spring Boot API is deployed to Render at <https://exposurewatch-api.onrender.com>.
+- Render builds the API from `server/Dockerfile` using `render.yaml`.
+- The API allows the configured Vercel origin and local Vite development origins through CORS.
 
 ## Flowchart with sequence
 
@@ -78,7 +75,7 @@ The frontend is deployed separately from the API. The backend remains the browse
 
 - The provider is an external availability, quota, and terms dependency.
 - No cache or application-level rate limit is present in the inspected implementation.
-- CORS allows the configured production origin and `http://localhost:5173` for `/exposure/**`.
+- CORS allows the configured production origin and localhost development ports for `/exposure/**`.
 - Raw email handling, logging, retention, and privacy policy require explicit verification.
 - The frontend and backend use the backend's title-case level contract; see [ADR-0001](decisions/0001-exposure-level-contract.md).
 

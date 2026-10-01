@@ -1,4 +1,3 @@
-
 # ExposureWatch — Email Exposure Checker
 
 ExposureWatch is a lightweight SvelteKit 5 application that checks whether an email address has appeared in known data breaches. It communicates with the ExposureWatch Spring Boot API and displays an exposure score, risk level, and detailed breach information.
@@ -30,12 +29,13 @@ ExposureWatch is a lightweight SvelteKit 5 application that checks whether an em
 - Svelte runes (`$state`, `$props`)
 - TypeScript
 - Vite
+- Deployed at: <https://exposurewatch.vercel.app>
 
 ### Backend
 
 - Spring Boot API
 - JSON exposure report
-- Hosted at: `https://api.exposurewatch.nz`
+- Hosted at: <https://exposurewatch-api.onrender.com>
 
 ---
 
@@ -88,6 +88,49 @@ PUBLIC_EXPOSURE_CHECK_PATH=/exposure/check
 ```
 
 Use the deployed API origin for production builds.
+
+## 🚀 Deployment
+
+**Current production deployment:** verified 2026-10-02.
+
+- Frontend: <https://exposurewatch.vercel.app>
+- API: <https://exposurewatch-api.onrender.com>
+- API health: <https://exposurewatch-api.onrender.com/actuator/health>
+
+The frontend is deployed to Vercel and the Spring Boot API is deployed to Render.
+The Render service is defined in [`render.yaml`](render.yaml) and builds from `server/Dockerfile`.
+
+Configure these Vercel production variables:
+
+```env
+PUBLIC_API_BASE_URL=https://exposurewatch-api.onrender.com
+PUBLIC_EXPOSURE_CHECK_PATH=/exposure/check
+```
+
+Configure this Render variable with the final Vercel origin:
+
+```env
+EXPOSUREWATCH_FRONTEND_ORIGIN=https://exposurewatch.vercel.app
+```
+
+Deploy the frontend with:
+
+```bash
+vercel --prod
+```
+
+Deploy the API with the Render Blueprint from `render.yaml`. The API health check is
+`/actuator/health`; the lightweight probe is `/health`.
+
+To test the API container locally:
+
+```bash
+cd server
+docker build -t exposurewatch-api .
+docker run --rm -p 8080:8080 exposurewatch-api
+```
+
+Use a different host port, such as `18080:8080`, if local Java is already using port 8080.
 
 If your API uses different routes or JSON shapes, update:
 
