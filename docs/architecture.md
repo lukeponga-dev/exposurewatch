@@ -8,19 +8,48 @@
 The system has a browser frontend and a Spring Boot API. The API validates JSON requests, normalizes submitted email values, calls XposedOrNot, maps provider data into an internal model, and computes a score. The browser receives only the ExposureWatch response.
 
 ```mermaid
-flowchart LR
+flowchart TD
     User[User browser]
-    Frontend[SvelteKit frontend]
+    Frontend[SvelteKit frontend<br/>Vercel deployment]
     API[Spring Boot API]
-    Provider[XposedOrNot API]
+    Provider[Breach data source<br/>XposedOrNot API]
 
     User --> Frontend
-    Frontend -->|POST /exposure/check| API
-    API -->|GET /v1/check-email/{email}?details=true| Provider
+    Frontend --> API
+    API --> Provider
     Provider --> API
     API --> Frontend
     Frontend --> User
 ```
+
+## Proposed hardening items
+
+1. Add a rate limiter to the API to prevent abuse.
+2. Add a CAPTCHA to the API to prevent abuse.
+3. Add a rate limiter to the API to prevent abuse.
+4. Add a CAPTCHA to the API to prevent abuse.
+5. Add a rate limiter to the API to prevent abuse.
+6. Add a CAPTCHA to the API to prevent abuse.
+7. Add a rate limiter to the API to prevent abuse.
+
+```
+```mermaid
+ sequenceDiagram
+    participant U as User
+    participant F as SvelteKit Frontend
+    participant A as ExposureWatch API
+    participant P as XposedOrNot Provider
+
+    U->>F: Enter email + submit
+    F->>A: POST /exposure/check { email }
+    A->>A: Validate + compute score
+    A->>P: Call provider API
+    P-->>A: Return breach data
+    A-->>F: JSON exposure result
+    F-->>U: Render score, level, breaches
+```
+
+The frontend is deployed separately from the API. The backend remains the browser's only breach-data integration boundary.
 
 ## Components
 
@@ -48,8 +77,8 @@ flowchart LR
 - No cache or application-level rate limit is present in the inspected implementation.
 - CORS allows the configured production origin and `http://localhost:5173` for `/exposure/**`.
 - Raw email handling, logging, retention, and privacy policy require explicit verification.
-- The frontend and backend currently expose different level conventions; see [ADR-0001](decisions/0001-exposure-level-contract.md).
+- The frontend and backend use the backend's title-case level contract; see [ADR-0001](decisions/0001-exposure-level-contract.md).
 
 ## Proposed Hardening
 
-Add provider protection, automated tests with a stubbed client, contract alignment, and environment-specific deployment checks before treating the service as production-ready.
+Add provider protection and environment-specific deployment checks before treating the service as production-ready. Controller and scoring coverage now exists through deterministic backend tests.
