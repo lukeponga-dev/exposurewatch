@@ -7,7 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./.svelte-kit/tsconfig.json",
     "lint": "prettier --check .",
     "format": "prettier --write ."
   },
@@ -15,6 +15,7 @@
     "@sveltejs/adapter-auto": "latest",
     "@sveltejs/kit": "latest",
     "@sveltejs/vite-plugin-svelte": "latest",
+    "@types/node": "^22.20.2",
     "prettier": "latest",
     "prettier-plugin-svelte": "latest",
     "svelte": "latest",
