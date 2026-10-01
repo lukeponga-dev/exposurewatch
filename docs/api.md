@@ -66,16 +66,19 @@ Error bodies use Spring `ProblemDetail` with a title and detail. A complete erro
 
 ## Health
 
-`GET /actuator/health` is exposed for deployment health checks.
+- `GET /health` returns `{"status":"UP"}` as a lightweight application health check.
+- `GET /actuator/health` remains available for deployment health checks and is configured as the Render health path.
 
 ## Frontend client
 
 The frontend calls `${PUBLIC_API_BASE_URL}${PUBLIC_EXPOSURE_CHECK_PATH}` from `src/lib/api/exposure.ts`. The default documented values are:
 
 ```env
-PUBLIC_API_BASE_URL=https://api.exposurewatch.nz
+PUBLIC_API_BASE_URL=http://localhost:8080
 PUBLIC_EXPOSURE_CHECK_PATH=/exposure/check
 ```
+
+Production builds should set `PUBLIC_API_BASE_URL` to the deployed API origin.
 
 ## Source Of Truth
 

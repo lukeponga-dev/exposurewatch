@@ -23,20 +23,21 @@ mvn spring-boot:run
 ```
 
 The API defaults to `http://localhost:8080`. Its server port is controlled by `PORT`.
+The API also exposes `/health` for a lightweight application probe.
 
 ## Configuration
 
-| Variable                        | Component | Default or example                 | Purpose                        |
-| ------------------------------- | --------- | ---------------------------------- | ------------------------------ |
-| `PUBLIC_API_BASE_URL`           | Frontend  | `https://api.exposurewatch.nz`     | API origin used by the browser |
-| `PUBLIC_EXPOSURE_CHECK_PATH`    | Frontend  | `/exposure/check`                  | Exposure endpoint path         |
-| `PORT`                          | Backend   | `8080`                             | HTTP listen port               |
-| `EXPOSUREWATCH_FRONTEND_ORIGIN` | Backend   | `https://exposurewatch.nz` in code | Allowed production CORS origin |
-| `XPOSEDORNOT_BASE_URL`          | Backend   | `https://api.xposedornot.com`      | Upstream provider base URL     |
+| Variable                        | Component | Default or example                 | Purpose                                                     |
+| ------------------------------- | --------- | ---------------------------------- | ----------------------------------------------------------- |
+| `PUBLIC_API_BASE_URL`           | Frontend  | `http://localhost:8080`            | Local API origin; use the deployed API origin in production |
+| `PUBLIC_EXPOSURE_CHECK_PATH`    | Frontend  | `/exposure/check`                  | Exposure endpoint path                                      |
+| `PORT`                          | Backend   | `8080`                             | HTTP listen port                                            |
+| `EXPOSUREWATCH_FRONTEND_ORIGIN` | Backend   | `https://exposurewatch.nz` in code | Allowed production CORS origin                              |
+| `XPOSEDORNOT_BASE_URL`          | Backend   | `https://api.xposedornot.com`      | Upstream provider base URL                                  |
 
 ## Deployment
 
-`render.yaml` describes a Docker-based Render web service rooted at `server`, with `/actuator/health` as the health check. The deployment plan sets the provider base URL and a frontend origin. The actual deployed hostnames and environment values require verification.
+`render.yaml` describes a Docker-based Render web service rooted at `server`, with `/actuator/health` as the health check. The API also exposes `/health` for a lightweight application probe. The deployment plan sets the provider base URL and a frontend origin. The actual deployed hostnames and environment values require verification.
 
 ## Monitoring And Recovery
 

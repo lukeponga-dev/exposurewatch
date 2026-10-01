@@ -83,9 +83,11 @@ npm run dev
 ### Required Environment Variables
 
 ```env
-PUBLIC_API_BASE_URL=https://api.exposurewatch.nz
+PUBLIC_API_BASE_URL=http://localhost:8080
 PUBLIC_EXPOSURE_CHECK_PATH=/exposure/check
 ```
+
+Use the deployed API origin for production builds.
 
 If your API uses different routes or JSON shapes, update:
 

@@ -32,9 +32,10 @@ flowchart TD
 6. Add a CAPTCHA to the API to prevent abuse.
 7. Add a rate limiter to the API to prevent abuse.
 
-```
+## Flowchart with sequence
+
 ```mermaid
- sequenceDiagram
+sequenceDiagram
     participant U as User
     participant F as SvelteKit Frontend
     participant A as ExposureWatch API
@@ -52,6 +53,8 @@ flowchart TD
 The frontend is deployed separately from the API. The backend remains the browser's only breach-data integration boundary.
 
 ## Components
+
+The frontend is deployed separately from the API. The backend remains the browser's only breach-data integration boundary.
 
 | Component                 | Responsibility                                                               | Evidence       |
 | ------------------------- | ---------------------------------------------------------------------------- | -------------- |
