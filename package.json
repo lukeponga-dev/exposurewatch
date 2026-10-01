@@ -25,5 +25,8 @@
     "svelte-check": "latest",
     "typescript": "latest",
     "vite": "latest"
+  },
+  "dependencies": {
+    "marked": "^18.0.14"
   }
 }

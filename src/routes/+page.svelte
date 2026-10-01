@@ -35,6 +35,7 @@
       <span>ExposureWatch</span>
     </a>
     <div class="header-meta">
+      <a class="docs-link" href="/docs">Documentation</a>
       <span class="status-dot" aria-hidden="true"></span>
       <span>Privacy-first exposure checks</span>
     </div>
@@ -158,6 +159,9 @@
   .brand { display: flex; align-items: center; gap: .78rem; color: var(--text); text-decoration: none; font-size: 1.05rem; font-weight: 760; letter-spacing: -.02em; }
   .brand-mark { display: grid; place-items: center; width: 2.15rem; height: 2.15rem; border-radius: .62rem; background: var(--violet); color: white; font-size: .9rem; font-weight: 850; box-shadow: 0 0 28px rgba(108, 92, 255, .32); }
   .header-meta { display: flex; align-items: center; gap: .65rem; color: #b7c5d7; font-size: .8rem; }
+  .docs-link { color: #b7c5d7; text-decoration: none; margin-right: 1rem; }
+  .docs-link:hover { color: var(--accent-strong); }
+  .docs-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
   .status-dot { width: .45rem; height: .45rem; border-radius: 50%; background: #63e6be; box-shadow: 0 0 0 5px rgba(99, 230, 190, .08), 0 0 14px rgba(99, 230, 190, .62); }
   main { padding: 1.5rem 0 5rem; }
   .hero { min-height: 440px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(430px, .85fr); align-items: center; gap: 2rem; }
