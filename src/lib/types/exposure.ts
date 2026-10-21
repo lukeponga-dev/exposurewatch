@@ -2,6 +2,7 @@ export type ExposureLevel = "Low" | "Medium" | "High" | "Critical";
 
 export interface Breach {
   breachName: string;
+  breachDate?: string;
   dataClasses: string[];
 }
 

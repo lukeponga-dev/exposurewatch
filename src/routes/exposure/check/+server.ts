@@ -3,13 +3,58 @@ import type { RequestHandler } from './$types';
 
 interface BreachRecord {
   breachName: string;
+  breachDate?: string;
   dataClasses: string[];
+}
+
+interface BreachMetadata {
+  breachedDate?: string;
+  exposedData?: string[];
+}
+
+let breachMetadataCache: Map<string, BreachMetadata> | null = null;
+let lastCacheFetch = 0;
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+async function getBreachMetadata(): Promise<Map<string, BreachMetadata>> {
+  const now = Date.now();
+  if (breachMetadataCache && now - lastCacheFetch < CACHE_TTL_MS) {
+    return breachMetadataCache;
+  }
+
+  try {
+    const res = await fetch('https://api.xposedornot.com/v1/breaches', {
+      headers: { 'User-Agent': 'ExposureWatch/1.0' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.exposedBreaches)) {
+        const map = new Map<string, BreachMetadata>();
+        for (const b of data.exposedBreaches) {
+          const id = (b.breachID || '').toLowerCase();
+          if (id) {
+            map.set(id, {
+              breachedDate: b.breachedDate || b.addedDate || undefined,
+              exposedData: Array.isArray(b.exposedData) ? b.exposedData : undefined
+            });
+          }
+        }
+        breachMetadataCache = map;
+        lastCacheFetch = now;
+        return map;
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to load breach metadata from XposedOrNot:', err);
+  }
+
+  return breachMetadataCache || new Map();
 }
 
 export const POST: RequestHandler = async ({ request }) => {
   let email = '';
-
   const contentType = request.headers.get('content-type') || '';
+
   if (contentType.includes('application/json')) {
     try {
       const body = await request.json();
@@ -26,7 +71,6 @@ export const POST: RequestHandler = async ({ request }) => {
       return json({ detail: 'Invalid form data' }, { status: 400 });
     }
   } else {
-    // Try parsing json anyway
     try {
       const body = await request.json();
       email = body.email || '';
@@ -43,8 +87,13 @@ export const POST: RequestHandler = async ({ request }) => {
   const breaches: BreachRecord[] = [];
 
   try {
-    const upstreamRes = await fetch(`https://api.xposedornot.com/v1/check-email/${encodeURIComponent(normalizedEmail)}?details=true`);
-    
+    const [metadataMap, upstreamRes] = await Promise.all([
+      getBreachMetadata(),
+      fetch(`https://api.xposedornot.com/v1/check-email/${encodeURIComponent(normalizedEmail)}?details=true`, {
+        headers: { 'User-Agent': 'ExposureWatch/1.0' }
+      })
+    ]);
+
     if (upstreamRes.ok) {
       const data = await upstreamRes.json();
       if (data && !data.Error) {
@@ -53,6 +102,7 @@ export const POST: RequestHandler = async ({ request }) => {
           for (const b of detailedBreaches) {
             const name = b.name || b.breach || b.Name || b.Breach;
             if (name) {
+              const meta = metadataMap.get(name.toLowerCase());
               let rawDataClasses = b.exposed_data || b.xposed_data || b.exposedData || b.xposedData || [];
               let dataClasses: string[] = [];
               if (Array.isArray(rawDataClasses)) {
@@ -60,7 +110,17 @@ export const POST: RequestHandler = async ({ request }) => {
               } else if (typeof rawDataClasses === 'string') {
                 dataClasses = rawDataClasses.split(/[;,]/).map((s: string) => s.trim()).filter(Boolean);
               }
-              breaches.push({ breachName: name, dataClasses });
+
+              if (dataClasses.length === 0 && meta?.exposedData) {
+                dataClasses = meta.exposedData;
+              }
+
+              const breachDate = b.breachedDate || b.breach_date || b.date || meta?.breachedDate;
+              breaches.push({
+                breachName: name,
+                breachDate: breachDate || undefined,
+                dataClasses
+              });
             }
           }
         } else {
@@ -70,7 +130,13 @@ export const POST: RequestHandler = async ({ request }) => {
               if (Array.isArray(group)) {
                 for (const item of group) {
                   if (typeof item === 'string' && item.trim().length > 0) {
-                    breaches.push({ breachName: item.trim(), dataClasses: [] });
+                    const trimmed = item.trim();
+                    const meta = metadataMap.get(trimmed.toLowerCase());
+                    breaches.push({
+                      breachName: trimmed,
+                      breachDate: meta?.breachedDate,
+                      dataClasses: meta?.exposedData || []
+                    });
                   }
                 }
               }
@@ -79,12 +145,21 @@ export const POST: RequestHandler = async ({ request }) => {
         }
       }
     } else if (upstreamRes.status !== 404) {
-      // 404 means email not found in breaches, which is normal. Other errors could be upstream failure.
       console.warn(`XposedOrNot returned status ${upstreamRes.status}`);
     }
   } catch (err) {
     console.warn('Failed to reach XposedOrNot API:', err);
   }
+
+  // Sort breaches by date descending (most recent breaches first)
+  breaches.sort((a, b) => {
+    if (a.breachDate && b.breachDate) {
+      return new Date(b.breachDate).getTime() - new Date(a.breachDate).getTime();
+    }
+    if (a.breachDate) return -1;
+    if (b.breachDate) return 1;
+    return a.breachName.localeCompare(b.breachName);
+  });
 
   const score = Math.min(100, breaches.length * 20);
   let level = 'Low';

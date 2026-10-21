@@ -83,12 +83,50 @@
     {:else if result}
       <section class="results" aria-live="polite" aria-label="Exposure report">
         <div class="result-header">
-          <div>
-            <span class="section-label">Exposure report</span>
-            <h2>{result.email}</h2>
+          <div class="result-header-left">
+            <span class="section-label">
+              <span class="report-dot" aria-hidden="true"></span>
+              Exposure Intelligence Report
+            </span>
+            <div class="result-title-row">
+              <h2>{result.email}</h2>
+              <span class="security-chip {result.level.toLowerCase()}">
+                {result.level} Risk
+              </span>
+            </div>
           </div>
-          <span class="record-count">{result.breaches.length} known {result.breaches.length === 1 ? "record" : "records"}</span>
+          <div class="result-header-right">
+            <div class="record-count-badge">
+              <strong>{result.breaches.length}</strong>
+              <span>{result.breaches.length === 1 ? "Breach Incident" : "Breach Incidents"}</span>
+            </div>
+          </div>
         </div>
+
+        {#if result.breaches.length > 0}
+          <div class="advisory-banner {result.level.toLowerCase()}">
+            <div class="advisory-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div class="advisory-text">
+              <strong>Recommended Action:</strong>
+              {#if result.score >= 70}
+                Critical threat level. Immediately change passwords for compromised accounts and enable Multi-Factor Authentication (2FA).
+              {:else if result.score >= 40}
+                High exposure detected. Rotate passwords and check for suspicious account activity.
+              {:else if result.score > 0}
+                Moderate exposure found. Update any shared credentials and maintain proactive security hygiene.
+              {:else}
+                No active threats detected. Continue following security best practices.
+              {/if}
+            </div>
+          </div>
+        {/if}
+
         <div class="result-grid">
           <ScoreCard score={result.score} level={result.level} />
           <BreachList breaches={result.breaches} />
@@ -300,13 +338,13 @@
     margin-bottom: 1.25rem;
   }
 
-  .panel-heading h2, .result-header h2 {
+  .panel-heading h2 {
     margin: .35rem 0 0;
     font-size: 1.15rem;
     letter-spacing: -.02em;
   }
 
-  .privacy-note, .record-count {
+  .privacy-note {
     color: var(--muted);
     font-size: .76rem;
   }
@@ -338,28 +376,160 @@
   .error strong, .message-code { color: var(--danger); }
   .message-code { font: 750 .65rem ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; }
 
+  /* Redesigned Section 2 (.results) */
   .results {
-    padding: 2rem;
-    border: 1px solid var(--border);
-    border-radius: 1rem;
-    background: rgba(8, 19, 34, .92);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+    position: relative;
+    padding: 2.25rem;
+    border: 1px solid var(--border-bright, #2f5475);
+    border-radius: 1.25rem;
+    background: radial-gradient(circle at 10% 10%, rgba(25, 211, 243, 0.05), transparent 40%),
+                linear-gradient(180deg, rgba(11, 23, 40, 0.95) 0%, rgba(6, 16, 31, 0.98) 100%);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(25, 211, 243, 0.1);
+    display: grid;
+    gap: 1.75rem;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .result-header {
     display: flex;
     justify-content: space-between;
-    align-items: end;
+    align-items: center;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(47, 84, 117, 0.35);
+  }
+
+  .result-header-left {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .report-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent, #19d3f3);
+    margin-right: 0.45rem;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .result-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .result-title-row h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    color: #fff;
+    word-break: break-all;
+  }
+
+  .security-chip {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+  }
+
+  .security-chip.critical, .security-chip.high {
+    color: #ff5f70;
+    background: rgba(255, 95, 112, 0.12);
+    border-color: rgba(255, 95, 112, 0.4);
+  }
+
+  .security-chip.medium {
+    color: #ffc56d;
+    background: rgba(255, 197, 109, 0.12);
+    border-color: rgba(255, 197, 109, 0.4);
+  }
+
+  .security-chip.low {
+    color: #63e6be;
+    background: rgba(99, 230, 190, 0.12);
+    border-color: rgba(99, 230, 190, 0.4);
+  }
+
+  .record-count-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: ui-monospace, monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .record-count-badge strong {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .advisory-banner {
+    display: flex;
+    align-items: center;
     gap: 1rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    background: rgba(14, 28, 48, 0.65);
+    border: 1px solid rgba(47, 84, 117, 0.35);
+  }
+
+  .advisory-banner.critical, .advisory-banner.high {
+    border-color: rgba(255, 95, 112, 0.4);
+    background: rgba(255, 95, 112, 0.08);
+    color: #ff7b88;
+  }
+
+  .advisory-banner.medium {
+    border-color: rgba(255, 197, 109, 0.35);
+    background: rgba(255, 197, 109, 0.08);
+    color: #ffc56d;
+  }
+
+  .advisory-banner.low {
+    border-color: rgba(99, 230, 190, 0.35);
+    background: rgba(99, 230, 190, 0.08);
+    color: #63e6be;
+  }
+
+  .advisory-icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .advisory-text {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: #d1e2f6;
+  }
+
+  .advisory-text strong {
+    color: #fff;
+    margin-right: 0.35rem;
   }
 
   .result-grid {
     display: grid;
-    grid-template-columns: minmax(300px, .75fr) minmax(0, 1.25fr);
+    grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
     gap: 2rem;
-    align-items: start;
+    align-items: stretch;
   }
 
   footer {
@@ -395,6 +565,7 @@
     h1 { font-size: clamp(2.5rem, 12vw, 3.6rem); }
     .trust-row { grid-template-columns: 1fr; gap: 1rem; }
     .panel-heading, .result-header { align-items: flex-start; flex-direction: column; }
+    .record-count-badge { align-items: flex-start; }
     .check-panel, .results { padding: 1.25rem; }
     footer { grid-template-columns: 1fr; gap: .75rem; }
     footer span:nth-child(2) { text-align: left; }
