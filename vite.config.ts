@@ -5,10 +5,7 @@ import adapter from '@sveltejs/adapter-node';
 export default defineConfig({
   plugins: [
     sveltekit({
-      adapter: adapter(),
-      alias: {
-        '$lib': 'src/lib'
-      }
+      adapter: adapter()
     })
   ],
   server: {

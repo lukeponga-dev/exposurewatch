@@ -3,6 +3,36 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      try {
+        const proto = Window.prototype;
+        const desc = Object.getOwnPropertyDescriptor(proto, 'fetch');
+        if (desc && !desc.set) {
+          Object.defineProperty(proto, 'fetch', {
+            get: desc.get,
+            set: function(val) {
+              Object.defineProperty(this, 'fetch', {
+                value: val,
+                writable: true,
+                configurable: true
+              });
+            },
+            configurable: true,
+            enumerable: desc.enumerable
+          });
+        }
+      } catch (e) {}
+      try {
+        if (window.fetch) {
+          const originalFetch = window.fetch.bind(window);
+          Object.defineProperty(window, 'fetch', {
+            value: originalFetch,
+            writable: true,
+            configurable: true
+          });
+        }
+      } catch (e) {}
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">
