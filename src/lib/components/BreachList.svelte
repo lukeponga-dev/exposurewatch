@@ -43,7 +43,7 @@
   {#if breaches.length === 0}
     <div class="empty">
       <div class="empty-icon-wrap" aria-hidden="true">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           <path d="m9 12 2 2 4-4"></path>
         </svg>
@@ -108,7 +108,7 @@
     justify-content: space-between;
     gap: 1rem;
     padding-bottom: 1.25rem;
-    border-bottom: 1px solid #D7D7D5;
+    border-bottom: 1px solid var(--border, #D7D7D5);
     margin-bottom: 1rem;
   }
   .label {
@@ -117,14 +117,14 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
-    color: #006B73;
+    color: var(--accent, #006B73);
   }
   h3 {
     margin: 0.25rem 0 0;
     font-size: 1.25rem;
     letter-spacing: -0.02em;
     font-weight: 700;
-    color: #2B2B2B;
+    color: var(--text-primary, #2B2B2B);
   }
   .heading-actions {
     display: flex;
@@ -134,18 +134,17 @@
   .record-badge {
     font-family: ui-monospace, monospace;
     font-size: 0.72rem;
-    color: #5A5A5A;
+    color: var(--text-secondary, #5A5A5A);
   }
   .record-badge strong {
-    color: #2B2B2B;
+    color: var(--text-primary, #2B2B2B);
   }
-  /* Secondary Button styling per spec: transparent background, teal border, teal text */
   .expand-btn {
-    border: 1px solid #006B73;
+    border: 1px solid var(--accent, #006B73);
     border-radius: 6px;
     padding: 0.35rem 0.75rem;
     background: transparent;
-    color: #006B73;
+    color: var(--accent, #006B73);
     font-family: inherit;
     font-size: 0.75rem;
     font-weight: 600;
@@ -153,9 +152,9 @@
     transition: all 0.15s ease;
   }
   .expand-btn:hover {
-    background: #E0F4F5;
-    border-color: #00848D;
-    color: #00848D;
+    background: var(--accent-soft, #E0F4F5);
+    border-color: var(--accent-hover, #00848D);
+    color: var(--accent-hover, #00848D);
   }
 
   .breach-list {
@@ -172,14 +171,13 @@
     gap: 0.75rem;
     padding: 1rem 1.15rem;
     border-radius: 8px;
-    background: #FFFFFF;
-    border: 1px solid #D7D7D5;
+    background: var(--surface, #FFFFFF);
+    border: 1px solid var(--border, #D7D7D5);
     transition: background-color 0.15s, border-color 0.15s;
   }
-  /* Row hover per spec: #E0F4F5 */
   .breach-item:hover {
-    background: #E0F4F5;
-    border-color: #006B73;
+    background: var(--surface-hover, #E0F4F5);
+    border-color: var(--accent, #006B73);
   }
   .index-column {
     display: flex;
@@ -190,7 +188,7 @@
     font-family: ui-monospace, monospace;
     font-size: 0.7rem;
     font-weight: 700;
-    color: #006B73;
+    color: var(--accent, #006B73);
   }
   .breach-main {
     display: grid;
@@ -206,7 +204,7 @@
   .breach-name {
     font-size: 0.95rem;
     font-weight: 650;
-    color: #2B2B2B;
+    color: var(--text-primary, #2B2B2B);
     letter-spacing: -0.01em;
   }
   .breach-date {
@@ -215,15 +213,15 @@
     gap: 0.35rem;
     font-family: ui-monospace, monospace;
     font-size: 0.7rem;
-    color: #5A5A5A;
-    background: #F2F2F0;
-    border: 1px solid #D7D7D5;
+    color: var(--text-secondary, #5A5A5A);
+    background: var(--bg, #F2F2F0);
+    border: 1px solid var(--border, #D7D7D5);
     padding: 0.18rem 0.55rem;
     border-radius: 4px;
     font-weight: 600;
   }
   .calendar-icon {
-    color: #006B73;
+    color: var(--accent, #006B73);
   }
   .data-pills {
     display: flex;
@@ -235,15 +233,15 @@
     align-items: center;
     gap: 0.3rem;
     font-size: 0.74rem;
-    color: #5A5A5A;
-    background: #F2F2F0;
-    border: 1px solid #D7D7D5;
+    color: var(--text-secondary, #5A5A5A);
+    background: var(--bg, #F2F2F0);
+    border: 1px solid var(--border, #D7D7D5);
     padding: 0.18rem 0.55rem;
     border-radius: 4px;
   }
   .pill.sensitive {
-    color: #C94F4F;
-    background: #FAEDED;
+    color: var(--status-error, #C94F4F);
+    background: var(--status-error-bg, #FAEDED);
     border-color: rgba(201, 79, 79, 0.3);
     font-weight: 600;
   }
@@ -251,12 +249,12 @@
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: #C94F4F;
+    background: var(--status-error, #C94F4F);
   }
   .no-details {
     margin: 0;
     font-size: 0.76rem;
-    color: #9C9C9C;
+    color: var(--text-tertiary, #9C9C9C);
   }
 
   .empty {
@@ -266,8 +264,8 @@
     place-items: center;
     gap: 0.5rem;
     border-radius: 8px;
-    background: #FFFFFF;
-    border: 1px dashed #D7D7D5;
+    background: var(--surface, #FFFFFF);
+    border: 1px dashed var(--border, #D7D7D5);
   }
   .empty-icon-wrap {
     width: 44px;
@@ -275,16 +273,17 @@
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: #E0F4F5;
+    background: var(--accent-soft, #E0F4F5);
+    color: var(--accent, #006B73);
     margin-bottom: 0.25rem;
   }
   .empty strong {
     font-size: 1.05rem;
-    color: #2B2B2B;
+    color: var(--text-primary, #2B2B2B);
     font-weight: 700;
   }
   .empty span {
-    color: #5A5A5A;
+    color: var(--text-secondary, #5A5A5A);
     font-size: 0.88rem;
     max-width: 360px;
   }

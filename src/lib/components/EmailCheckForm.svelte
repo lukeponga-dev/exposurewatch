@@ -90,7 +90,7 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
-    color: #2B2B2B;
+    color: var(--text-primary, #2B2B2B);
   }
   .scan-pill {
     display: inline-flex;
@@ -98,14 +98,14 @@
     gap: 0.35rem;
     font-family: ui-monospace, monospace;
     font-size: 0.68rem;
-    color: #006B73;
+    color: var(--accent, #006B73);
     font-weight: 600;
   }
   .scan-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #006B73;
+    background: var(--accent, #006B73);
   }
   .input-wrap {
     position: relative;
@@ -115,7 +115,7 @@
   .mail-icon {
     position: absolute;
     left: 1.15rem;
-    color: #5A5A5A;
+    color: var(--text-secondary, #5A5A5A);
     pointer-events: none;
     transition: color 0.15s;
   }
@@ -123,35 +123,35 @@
     width: 100%;
     height: 52px;
     padding: 0 1.2rem 0 3rem;
-    border: 1px solid #D7D7D5;
+    border: 1px solid var(--border, #D7D7D5);
     border-radius: 8px;
     font-family: inherit;
     font-size: 0.95rem;
-    background: #FFFFFF;
-    color: #2B2B2B;
+    background: var(--surface, #FFFFFF);
+    color: var(--text-primary, #2B2B2B);
     outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
   }
   input::placeholder {
-    color: #9C9C9C;
+    color: var(--text-tertiary, #9C9C9C);
   }
   input:hover {
-    border-color: #006B73;
+    border-color: var(--accent, #006B73);
   }
   input:focus {
-    border-color: #006B73;
-    box-shadow: 0 0 0 3px rgba(0, 107, 115, 0.15);
+    border-color: var(--accent, #006B73);
+    box-shadow: 0 0 0 3px rgba(0, 107, 115, 0.2);
   }
   .input-wrap:focus-within .mail-icon {
-    color: #006B73;
+    color: var(--accent, #006B73);
   }
 
   .submit-btn {
     height: 52px;
     border: none;
     border-radius: 8px;
-    background: #006B73;
-    color: #FFFFFF;
+    background: var(--accent, #006B73);
+    color: var(--accent-contrast, #FFFFFF);
     cursor: pointer;
     font-family: inherit;
     font-size: 0.95rem;
@@ -167,21 +167,21 @@
     width: 100%;
   }
   .submit-btn:not(:disabled):hover {
-    background: #00848D;
+    background: var(--accent-hover, #00848D);
   }
   .submit-btn:not(:disabled):active {
     transform: translateY(1px);
   }
   .submit-btn:disabled {
-    background: #D7D7D5;
-    color: #9C9C9C;
+    background: var(--border, #D7D7D5);
+    color: var(--text-tertiary, #9C9C9C);
     cursor: not-allowed;
   }
   .mini-spinner {
     width: 1rem;
     height: 1rem;
     border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: #FFFFFF;
+    border-top-color: currentColor;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
   }
@@ -202,13 +202,13 @@
     align-items: center;
     gap: 0.4rem;
     font-size: 0.76rem;
-    color: #5A5A5A;
+    color: var(--text-secondary, #5A5A5A);
   }
   .badge-free {
     font-family: ui-monospace, monospace;
     font-size: 0.68rem;
-    color: #006B73;
-    background: #E0F4F5;
+    color: var(--accent, #006B73);
+    background: var(--accent-soft, #E0F4F5);
     padding: 0.2rem 0.55rem;
     border-radius: 4px;
     font-weight: 600;
