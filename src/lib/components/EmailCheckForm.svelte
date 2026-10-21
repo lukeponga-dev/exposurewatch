@@ -15,8 +15,8 @@
 </script>
 
 <form class="check-form" onsubmit={submit}>
-  <label for="email">Email address</label>
-  <div class="input-row">
+  <div class="input-group">
+    <label for="email" class="label">Email address</label>
     <input
       id="email"
       name="email"
@@ -28,25 +28,64 @@
       required
       {disabled}
     />
-    <button type="submit" disabled={disabled || !email.trim()}>
-      {disabled ? "Checking…" : "Check exposure"}
-    </button>
   </div>
-  <p>Your address is used only to run this exposure check.</p>
+  <button type="submit" disabled={disabled || !email.trim()}>
+    {disabled ? "Checking…" : "Check exposure"}
+  </button>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+    <p class="privacy-hint">Your address is used only to run this exposure check.</p>
+    <span class="label" style="opacity: 0.5; font-size: 0.65rem;">No account required</span>
+  </div>
 </form>
 
 <style>
-  .check-form { display: grid; gap: .65rem; }
-  label { color: #b9c9da; text-transform: uppercase; font: 700 .65rem ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; }
-  .input-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .8rem; }
-  input { min-width: 0; min-height: 60px; border: 1px solid #2b4461; border-radius: .62rem; padding: 0 1.1rem; background: #071323; color: var(--text); outline: none; transition: border-color .2s, box-shadow .2s, background .2s; }
-  input::placeholder { color: #60748d; }
-  input:hover { border-color: #3a5876; }
-  input:focus { border-color: var(--accent); background: #09182a; box-shadow: 0 0 0 3px rgba(25, 211, 243, .12), 0 0 22px rgba(25, 211, 243, .09); }
-  button { min-height: 60px; border: 0; border-radius: .62rem; padding: 0 1.7rem; background: var(--violet); color: white; font-weight: 760; cursor: pointer; transition: transform .18s, filter .18s, box-shadow .18s; }
-  button:not(:disabled):hover { transform: translateY(-1px); filter: brightness(1.09); box-shadow: 0 12px 30px rgba(108, 92, 255, .25); }
-  button:focus-visible { outline: 3px solid rgba(82, 229, 255, .5); outline-offset: 3px; }
-  button:disabled { opacity: .62; cursor: not-allowed; }
-  p { margin: 0; color: var(--muted); font-size: .73rem; }
-  @media (max-width: 640px) { .input-row { grid-template-columns: 1fr; } }
+  .check-form { display: grid; gap: 1.5rem; }
+  .input-group { display: flex; flex-direction: column; gap: 0.75rem; }
+  .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  input {
+    width: 100%;
+    padding: 1.25rem;
+    border: 2px solid var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: box-shadow 0.2s;
+  }
+  input::placeholder { color: var(--ink-medium); opacity: 0.6; }
+  input:focus { box-shadow: 4px 4px 0 var(--accent); }
+  button {
+    background: var(--accent);
+    color: white;
+    border: 2px solid var(--ink);
+    padding: 1.25rem 2rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  button:not(:disabled):hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .privacy-hint {
+    font-size: 0.75rem;
+    color: var(--ink-medium);
+    margin: 0;
+  }
 </style>

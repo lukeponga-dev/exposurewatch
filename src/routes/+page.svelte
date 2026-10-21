@@ -56,28 +56,18 @@
           <div><strong>Actionable</strong><span>See exposed data</span></div>
         </div>
       </div>
-      <div class="signal-visual" aria-label="Global breach signal illustration">
-        <img
-          src="/assets/exposurewatch-signal-globe.png"
-          alt="A luminous digital globe showing connected breach signals"
-        />
-        <div class="signal-panel">
-          <span class="signal-panel-label">Exposure intelligence</span>
-          <strong>Known breach records</strong>
-          <span>Mapped into one clear result</span>
-        </div>
+      <div class="hero-right">
+        <section class="check-panel" aria-labelledby="check-heading">
+          <div class="panel-heading">
+            <div>
+              <span class="section-label">Run a check</span>
+              <h2 id="check-heading">Check an email address</h2>
+            </div>
+            <span class="privacy-note">No account required</span>
+          </div>
+          <EmailCheckForm onCheck={handleCheck} disabled={loading} />
+        </section>
       </div>
-    </section>
-
-    <section class="check-panel" aria-labelledby="check-heading">
-      <div class="panel-heading">
-        <div>
-          <span class="section-label">Run a check</span>
-          <h2 id="check-heading">Check an email address</h2>
-        </div>
-        <span class="privacy-note">No account required</span>
-      </div>
-      <EmailCheckForm onCheck={handleCheck} disabled={loading} />
     </section>
 
     {#if loading}
@@ -223,9 +213,9 @@
   }
 
   .hero {
-    min-height: 400px;
+    min-height: 440px;
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(400px, .85fr);
+    grid-template-columns: minmax(0, 1.15fr) minmax(420px, .85fr);
     align-items: center;
     gap: 3rem;
     padding: 1.5rem 0;
@@ -287,45 +277,9 @@
   .trust-row strong { color: #e9f6ff; font-size: .85rem; }
   .trust-row span { color: var(--muted); font-size: .74rem; }
 
-  .signal-visual {
+  .hero-right {
     position: relative;
-    min-height: 380px;
-    display: grid;
-    place-items: center;
   }
-
-  .signal-visual img {
-    width: min(460px, 100%);
-    height: auto;
-    mix-blend-mode: screen;
-    filter: drop-shadow(0 0 38px rgba(16, 184, 226, .14));
-    transform: translateX(2%);
-  }
-
-  .signal-panel {
-    position: absolute;
-    right: 0;
-    bottom: 1.5rem;
-    width: 230px;
-    display: grid;
-    gap: .45rem;
-    padding: 1.15rem 1.25rem;
-    border: 1px solid rgba(63, 132, 170, .45);
-    border-radius: .75rem;
-    background: rgba(6, 16, 31, .88);
-    box-shadow: 0 16px 50px rgba(0, 0, 0, .38);
-    backdrop-filter: blur(14px);
-  }
-
-  .signal-panel-label {
-    color: var(--accent-strong);
-    text-transform: uppercase;
-    font: 700 .62rem ui-monospace, SFMono-Regular, Menlo, monospace;
-    letter-spacing: .14em;
-  }
-
-  .signal-panel strong { font-size: .9rem; }
-  .signal-panel > span:last-child { color: var(--muted); font-size: .72rem; line-height: 1.4; }
 
   .check-panel {
     position: relative;
@@ -333,8 +287,9 @@
     padding: 2rem;
     border: 1px solid var(--border-bright);
     border-radius: 1rem;
-    background: rgba(9, 22, 39, .9);
-    box-shadow: 0 22px 70px rgba(0, 0, 0, .28);
+    background: rgba(9, 22, 39, .92);
+    box-shadow: 0 22px 70px rgba(0, 0, 0, .32);
+    backdrop-filter: blur(12px);
   }
 
   .panel-heading {
@@ -429,7 +384,6 @@
   @media (max-width: 1024px) {
     .site-header, main, footer { width: min(100% - 3rem, 760px); }
     .hero { min-height: auto; grid-template-columns: 1fr; gap: 2rem; }
-    .signal-visual { min-height: 380px; }
     .result-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   }
 
@@ -440,8 +394,6 @@
     main { padding: 1.5rem 0 3rem; gap: 1.5rem; }
     h1 { font-size: clamp(2.5rem, 12vw, 3.6rem); }
     .trust-row { grid-template-columns: 1fr; gap: 1rem; }
-    .signal-visual { min-height: 300px; }
-    .signal-panel { right: 0; bottom: 0; width: 100%; }
     .panel-heading, .result-header { align-items: flex-start; flex-direction: column; }
     .check-panel, .results { padding: 1.25rem; }
     footer { grid-template-columns: 1fr; gap: .75rem; }

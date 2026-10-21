@@ -4,6 +4,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script>
+      // Intercept and swallow external extension cross-origin errors in iframe preview
+      window.addEventListener('error', function(event) {
+        if (
+          (event.filename && event.filename.includes('chrome-extension://')) ||
+          (event.message && (
+            event.message.includes('chrome-extension') ||
+            event.message.includes('cross-origin frame') ||
+            event.message.includes('Failed to read a named property')
+          ))
+        ) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
+          return true;
+        }
+      }, true);
+
+      window.addEventListener('unhandledrejection', function(event) {
+        if (
+          event.reason && (
+            String(event.reason).includes('chrome-extension') ||
+            String(event.reason).includes('cross-origin frame') ||
+            String(event.reason).includes('Failed to read a named property')
+          )
+        ) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
+          return true;
+        }
+      }, true);
+
       try {
         const boundFetch = window.fetch ? window.fetch.bind(window) : globalThis.fetch;
         try { delete window.fetch; } catch (err) {}
@@ -15,6 +45,9 @@
         });
       } catch (e) {}
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">
