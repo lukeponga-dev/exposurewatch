@@ -1,10 +1,19 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import adapter from '@sveltejs/adapter-node';
 
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [
+    sveltekit({
+      adapter: adapter(),
+      alias: {
+        '$lib': 'src/lib'
+      }
+    })
+  ],
   server: {
     host: '0.0.0.0',
-    allowedHosts: ['terminal.local']
+    port: 3000,
+    allowedHosts: true
   }
 });

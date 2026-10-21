@@ -1,14 +1,11 @@
-import {
-  PUBLIC_API_BASE_URL,
-  PUBLIC_EXPOSURE_CHECK_PATH,
-} from "$env/static/public";
 import type { ExposureResult } from "$lib/types/exposure";
 
 export async function checkExposure(email: string): Promise<ExposureResult> {
-  const baseUrl = PUBLIC_API_BASE_URL.replace(/\/$/, "");
-  const path = PUBLIC_EXPOSURE_CHECK_PATH.startsWith("/")
-    ? PUBLIC_EXPOSURE_CHECK_PATH
-    : `/${PUBLIC_EXPOSURE_CHECK_PATH}`;
+  const envBase = (import.meta.env.PUBLIC_API_BASE_URL as string) || "";
+  const envPath = (import.meta.env.PUBLIC_EXPOSURE_CHECK_PATH as string) || "/exposure/check";
+
+  const baseUrl = envBase.replace(/\/$/, "");
+  const path = envPath.startsWith("/") ? envPath : `/${envPath}`;
 
   const response = await fetch(`${baseUrl}${path}`, {
     method: "POST",

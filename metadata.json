@@ -1,0 +1,7 @@
+{
+  "name": "ExposureWatch",
+  "description": "Check email security exposure and data breaches with XposedOrNot integration.",
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

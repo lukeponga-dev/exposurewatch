@@ -4,18 +4,17 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite dev --host 0.0.0.0 --port 3000",
     "build": "vite build",
+    "start": "node build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./.svelte-kit/tsconfig.json",
     "lint": "prettier --check .",
     "format": "prettier --write ."
   },
-  "overrides": {
-    "cookie": "^0.7.0"
-  },
+
   "devDependencies": {
-    "@sveltejs/adapter-auto": "latest",
+    "@sveltejs/adapter-node": "^5.2.0",
     "@sveltejs/kit": "latest",
     "@sveltejs/vite-plugin-svelte": "latest",
     "@types/node": "^22.20.2",
