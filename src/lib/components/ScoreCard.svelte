@@ -9,20 +9,25 @@
   const levelClass = $derived(level.toLowerCase());
   
   const levelColor = $derived(
-    level === 'Critical' || level === 'High' ? '#ff5f70' :
-    level === 'Medium' ? '#ffc56d' : '#63e6be'
+    level === 'Critical' || level === 'High' ? '#C94F4F' :
+    level === 'Medium' ? '#D9A441' : '#2F7F6D'
+  );
+
+  const levelBg = $derived(
+    level === 'Critical' || level === 'High' ? '#FAEDED' :
+    level === 'Medium' ? '#FDF7EA' : '#EAF4F1'
   );
 </script>
 
 <div class="score-card {levelClass}" aria-label="Exposure risk score">
-  <div class="card-glow" aria-hidden="true" style:background={levelColor}></div>
-  
   <div class="score-topline">
     <div class="topline-left">
       <span class="pulse-indicator" style:background={levelColor}></span>
-      <span class="label">Threat Level</span>
+      <span class="label">Threat Evaluation</span>
     </div>
-    <span class="level-badge {levelClass}">{level}</span>
+    <span class="level-badge" style:color={levelColor} style:background={levelBg}>
+      {level} Risk
+    </span>
   </div>
 
   <div class="score-display">
@@ -39,7 +44,6 @@
         class="meter-bar"
         style:width={`${Math.min(100, Math.max(0, score))}%`}
         style:background={levelColor}
-        style:box-shadow={`0 0 12px ${levelColor}`}
       ></div>
     </div>
   </div>
@@ -48,43 +52,30 @@
     <div class="detail-row">
       <span class="detail-label">Status</span>
       <strong class="detail-val">
-        {#if level === 'Critical'}Urgent Attention Required
-        {:else if level === 'High'}High Risk Identified
-        {:else if level === 'Medium'}Moderate Exposure
-        {:else}Low Exposure Detected
+        {#if level === 'Critical'}Immediate action advised
+        {:else if level === 'High'}High exposure identified
+        {:else if level === 'Medium'}Moderate exposure
+        {:else}Low exposure detected
         {/if}
       </strong>
     </div>
     <p class="description">
-      Calculated from incident volume, recency, and sensitive exposed data classes.
+      Calculated from breach volume, recency, and sensitive exposed data classes.
     </p>
   </div>
 </div>
 
 <style>
   .score-card {
-    position: relative;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 1.5rem;
     padding: 2rem;
-    border: 1px solid var(--border-bright, #2f5475);
-    border-radius: 1rem;
-    background: linear-gradient(180deg, rgba(14, 28, 48, 0.85) 0%, rgba(9, 20, 36, 0.95) 100%);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-  }
-  .card-glow {
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    filter: blur(50px);
-    opacity: 0.18;
-    pointer-events: none;
+    border: 1px solid #D7D7D5;
+    border-radius: 12px;
+    background: #FFFFFF;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
   }
   .score-topline {
     display: flex;
@@ -95,54 +86,29 @@
   .topline-left {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
   }
   .pulse-indicator {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    box-shadow: 0 0 8px currentColor;
-    animation: pulse 2.2s infinite ease-in-out;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.45; transform: scale(0.85); }
   }
   .label {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     font-weight: 700;
-    color: var(--muted, #8fa2ba);
+    color: #5A5A5A;
   }
   .level-badge {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 0.28rem 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0.25rem 0.65rem;
     border-radius: 999px;
-    border: 1px solid currentColor;
-  }
-  .level-badge.critical, .level-badge.high {
-    color: #ff5f70;
-    background: rgba(255, 95, 112, 0.12);
-    border-color: rgba(255, 95, 112, 0.45);
-    box-shadow: 0 0 16px rgba(255, 95, 112, 0.18);
-  }
-  .level-badge.medium {
-    color: #ffc56d;
-    background: rgba(255, 197, 109, 0.12);
-    border-color: rgba(255, 197, 109, 0.45);
-    box-shadow: 0 0 16px rgba(255, 197, 109, 0.15);
-  }
-  .level-badge.low {
-    color: #63e6be;
-    background: rgba(99, 230, 190, 0.12);
-    border-color: rgba(99, 230, 190, 0.45);
-    box-shadow: 0 0 16px rgba(99, 230, 190, 0.15);
   }
   .score-display {
     display: grid;
@@ -151,13 +117,13 @@
   .score-value-wrap {
     display: flex;
     align-items: baseline;
-    gap: 0.65rem;
+    gap: 0.6rem;
   }
   .score-number {
-    font-size: clamp(3.6rem, 5.5vw, 4.8rem);
+    font-size: clamp(3.6rem, 5vw, 4.6rem);
     line-height: 0.88;
     font-weight: 800;
-    letter-spacing: -0.06em;
+    letter-spacing: -0.05em;
   }
   .score-scale {
     display: flex;
@@ -166,32 +132,33 @@
   }
   .max-score {
     font-size: 1rem;
-    color: var(--muted, #8fa2ba);
+    font-weight: 600;
+    color: #5A5A5A;
   }
   .scale-label {
     font-family: ui-monospace, monospace;
-    font-size: 0.62rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #617b98;
+    letter-spacing: 0.08em;
+    color: #9C9C9C;
   }
   .meter-track {
-    height: 8px;
+    height: 6px;
     border-radius: 99px;
-    background: rgba(20, 37, 60, 0.9);
+    background: #F2F2F0;
+    border: 1px solid #D7D7D5;
     overflow: hidden;
-    border: 1px solid rgba(47, 84, 117, 0.4);
   }
   .meter-bar {
     height: 100%;
     border-radius: inherit;
-    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: width 0.5s ease;
   }
   .score-details {
     display: grid;
     gap: 0.65rem;
     padding-top: 1.25rem;
-    border-top: 1px solid rgba(47, 84, 117, 0.3);
+    border-top: 1px solid #D7D7D5;
   }
   .detail-row {
     display: flex;
@@ -201,20 +168,20 @@
   }
   .detail-label {
     font-family: ui-monospace, monospace;
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted, #8fa2ba);
+    letter-spacing: 0.08em;
+    color: #5A5A5A;
   }
   .detail-val {
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    color: var(--text, #f4f8ff);
+    color: #2B2B2B;
   }
   .description {
     margin: 0;
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     line-height: 1.5;
-    color: var(--muted, #8fa2ba);
+    color: #5A5A5A;
   }
 </style>
